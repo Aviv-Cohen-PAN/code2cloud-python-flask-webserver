@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM python:3.10-slim-bookworm⁠
 
 WORKDIR /app
 COPY . /app
@@ -17,4 +17,5 @@ EXPOSE 5000
 HEALTHCHECK CMD curl --fail http://localhost:5000 || exit 1   
 
 CMD python ./index.py
+
 
