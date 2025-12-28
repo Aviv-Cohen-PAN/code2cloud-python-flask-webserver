@@ -6,6 +6,7 @@ resource "aws_sns_topic" "cloudtrail_notifications" {
 
   tags = {
     "managed_by" = "paloaltonetworks"
+    yor_trace    = "2289a4d4-9dbf-4dfa-a9ae-738f86610605"
   }
 }
 
@@ -51,14 +52,15 @@ resource "aws_sns_topic_delivery_policy" "cloudtrail_notifications_delivery_poli
 resource "aws_sqs_queue" "cloudtrail_queue" {
   name = "cortex-cloudtrail-logs-queue-980573775279-m-a-9995931061259"
 
-  delay_seconds             = 0
-  max_message_size          = 1048576
-  message_retention_seconds = 345600
+  delay_seconds              = 0
+  max_message_size           = 1048576
+  message_retention_seconds  = 345600
   visibility_timeout_seconds = 30
-  sqs_managed_sse_enabled   = true
+  sqs_managed_sse_enabled    = true
 
   tags = {
     "managed_by" = "paloaltonetworks"
+    yor_trace    = "036eb92c-3861-4456-a7df-e4e86a72c7df"
   }
 }
 

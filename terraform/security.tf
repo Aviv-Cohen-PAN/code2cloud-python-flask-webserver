@@ -11,6 +11,9 @@ data "aws_caller_identity" "current" {}
 resource "aws_accessanalyzer_analyzer" "external_access" {
   analyzer_name = "ExternalIAMAccessAnalyzer"
   type          = "ACCOUNT"
+  tags = {
+    yor_trace = "8247eab7-9bf9-411a-8f76-8c3309edbb86"
+  }
 }
 
 # Configures account-wide settings to block all public access from security groups.
@@ -58,6 +61,7 @@ resource "aws_kms_key" "cloudtrail_key" {
 
   tags = {
     managed_by = "paloaltonetworks"
+    yor_trace  = "c077a99a-c723-4a20-a4db-a7dfef9e76d9"
   }
 }
 
@@ -73,7 +77,8 @@ resource "aws_security_group" "eks_control_plane_sg" {
   vpc_id      = aws_vpc.k8s_vpc.id
 
   tags = {
-    Name = "${var.cluster_name}-control-plane-sg"
+    Name      = "${var.cluster_name}-control-plane-sg"
+    yor_trace = "8dadc1f2-715f-47cb-b79c-0d516f4a2a4a"
   }
 }
 
@@ -112,7 +117,8 @@ resource "aws_security_group" "eks_node_sg" {
   }
 
   tags = {
-    Name = "${var.cluster_name}-EKSNodeSG"
+    Name      = "${var.cluster_name}-EKSNodeSG"
+    yor_trace = "9badff70-5195-4eff-b61d-0c819e81362c"
   }
 }
 
@@ -138,6 +144,7 @@ resource "aws_security_group" "eks_shared_sg" {
   tags = {
     Name                                        = "eks-cluster-sg-${var.cluster_name}"
     "kubernetes.io/cluster/${var.cluster_name}" = "owned"
+    yor_trace                                   = "4c3b1963-669e-4f12-9ab2-fd0a279acfb2"
   }
 }
 
@@ -151,6 +158,7 @@ resource "aws_default_security_group" "k8s_vpc_default" {
   vpc_id = aws_vpc.k8s_vpc.id
 
   tags = {
-    Name = "${var.cluster_name}-default-sg"
+    Name      = "${var.cluster_name}-default-sg"
+    yor_trace = "15f739a2-a63e-4bdc-8011-93133b1adfda"
   }
 }

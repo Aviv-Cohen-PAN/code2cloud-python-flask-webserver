@@ -18,6 +18,7 @@ resource "aws_ecr_repository" "flask_webserver_repo" {
 
   tags = {
     "project" = var.cluster_name
+    yor_trace = "85cb9b0c-f4ab-491e-9581-3bcb23a1fdf1"
   }
 }
 
@@ -38,5 +39,6 @@ resource "aws_ecr_repository" "malware_repo" {
 
   tags = {
     "project" = var.cluster_name
+    yor_trace = "f4ef0bc2-99eb-4894-9db0-6ad705b90c90"
   }
 }
