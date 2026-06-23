@@ -84,5 +84,6 @@ resource "aws_instance" "eks_node" {
   tags = {
     Name                                        = "${var.cluster_name}-worker-node"
     "kubernetes.io/cluster/${var.cluster_name}" = "owned"
+    yor_trace                                   = "2da696e6-f696-41d7-9b63-37e60eb457ec"
   }
 }

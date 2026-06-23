@@ -23,6 +23,9 @@ resource "aws_lambda_function" "cortex_custom_lambda" {
   memory_size   = local.common_lambda_settings.memory_size
   architectures = local.common_lambda_settings.architectures
   timeout       = 75
+  tags = {
+    yor_trace = "63347fb9-22ac-4586-b456-9015c4fbed0b"
+  }
 }
 
 # Defines the Lambda function responsible for emptying S3 buckets.
@@ -38,6 +41,9 @@ resource "aws_lambda_function" "empty_bucket_lambda" {
   memory_size   = local.common_lambda_settings.memory_size
   architectures = local.common_lambda_settings.architectures
   timeout       = 600
+  tags = {
+    yor_trace = "5c574dc2-e7aa-4e9e-a130-8c4f62de7318"
+  }
 }
 
 # Defines the second Cortex custom Lambda function.
@@ -53,4 +59,7 @@ resource "aws_lambda_function" "cortex_custom_lambda_2" {
   memory_size   = local.common_lambda_settings.memory_size
   architectures = local.common_lambda_settings.architectures
   timeout       = 75
+  tags = {
+    yor_trace = "3ba3373c-9853-4742-9ae9-99e23cf201b0"
+  }
 }

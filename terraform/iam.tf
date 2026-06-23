@@ -16,6 +16,9 @@ resource "aws_iam_role" "eks_cluster" {
       Principal = { Service = "eks.amazonaws.com" }
     }]
   })
+  tags = {
+    yor_trace = "ab5920c6-58eb-45dc-a1a9-f059b373377e"
+  }
 }
 
 # Attaches the required AWS-managed policy for EKS clusters to the role.
@@ -37,12 +40,18 @@ resource "aws_iam_role" "eks_node" {
       Principal = { Service = "ec2.amazonaws.com" }
     }]
   })
+  tags = {
+    yor_trace = "9eadf30b-994e-4776-91cf-288794b430b9"
+  }
 }
 
 # Creates an instance profile, which is a container for the IAM role that EC2 can use.
 resource "aws_iam_instance_profile" "eks_node" {
   name_prefix = "eks-node-profile-"
   role        = aws_iam_role.eks_node.name
+  tags = {
+    yor_trace = "84635e7e-c5e9-454f-8317-3c9cbddbc15c"
+  }
 }
 
 # Attaches the standard EKS worker node policy.
@@ -84,6 +93,9 @@ data "aws_iam_policy_document" "lambda_assume_role" {
 resource "aws_iam_role" "cortex_custom_lambda" {
   name_prefix        = "cortex-custom-lambda-role-"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+  tags = {
+    yor_trace = "c93aa030-6d14-4fcf-931d-f397b87a3666"
+  }
 }
 
 # Attaches the basic execution policy, allowing the function to write to CloudWatch Logs.
@@ -96,6 +108,9 @@ resource "aws_iam_role_policy_attachment" "cortex_custom_lambda_policy" {
 resource "aws_iam_role" "empty_bucket_lambda" {
   name_prefix        = "empty-bucket-lambda-role-"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+  tags = {
+    yor_trace = "785d5cf6-d849-4ef7-ad34-83b9d6be31aa"
+  }
 }
 
 # Attaches the basic execution policy.
@@ -108,4 +123,7 @@ resource "aws_iam_role_policy_attachment" "empty_bucket_lambda_policy" {
 resource "aws_iam_role" "cortex_custom_lambda_2" {
   name_prefix        = "cortex-custom-lambda-2-role-"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+  tags = {
+    yor_trace = "0f85e628-919b-4ae2-9f8f-885951e244f2"
+  }
 }

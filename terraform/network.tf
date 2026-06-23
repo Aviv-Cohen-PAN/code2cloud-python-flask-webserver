@@ -12,7 +12,8 @@ resource "aws_vpc" "k8s_vpc" {
   instance_tenancy     = "default"
 
   tags = {
-    Name = "${var.cluster_name}-VPC"
+    Name      = "${var.cluster_name}-VPC"
+    yor_trace = "44906a5c-1ff5-453f-a3cc-7947c3a8f155"
   }
 }
 
@@ -30,6 +31,7 @@ resource "aws_subnet" "public_1" {
   tags = {
     Name                     = "${var.cluster_name}-public-subnet-1"
     "kubernetes.io/role/elb" = "1"
+    yor_trace                = "202b8d79-33a3-4b07-8369-b1876e2f14a2"
   }
 }
 
@@ -43,6 +45,7 @@ resource "aws_subnet" "public_2" {
   tags = {
     Name                     = "${var.cluster_name}-public-subnet-2"
     "kubernetes.io/role/elb" = "1"
+    yor_trace                = "d888a9f3-b7a5-4c28-be8b-f5457fc964d8"
   }
 }
 
@@ -55,6 +58,7 @@ resource "aws_subnet" "private_1" {
   tags = {
     Name                              = "${var.cluster_name}-private-subnet-1"
     "kubernetes.io/role/internal-elb" = "1"
+    yor_trace                         = "014d1598-ae21-4827-92c4-3208eed7f499"
   }
 }
 
@@ -67,6 +71,7 @@ resource "aws_subnet" "private_2" {
   tags = {
     Name                              = "${var.cluster_name}-private-subnet-2"
     "kubernetes.io/role/internal-elb" = "1"
+    yor_trace                         = "9a70f1a6-18ff-4f03-ab73-85cb07c88b2f"
   }
 }
 
@@ -79,36 +84,45 @@ resource "aws_subnet" "private_2" {
 resource "aws_internet_gateway" "k8s_igw" {
   vpc_id = aws_vpc.k8s_vpc.id
   tags = {
-    Name = "${var.cluster_name}-IGW"
+    Name      = "${var.cluster_name}-IGW"
+    yor_trace = "df1b4460-ccde-4cc8-80a1-5ef7d0276c69"
   }
 }
 
 # Allocates a static public IP address for the first NAT Gateway.
 resource "aws_eip" "nat_eip_1" {
   domain = "vpc"
-  tags   = { Name = "${var.cluster_name}-NAT1-EIP" }
+  tags = { Name = "${var.cluster_name}-NAT1-EIP"
+    yor_trace = "def229a4-4a8f-45db-8048-6f0f3236b6b5"
+  }
 }
 
 # Allocates a static public IP address for the second NAT Gateway.
 resource "aws_eip" "nat_eip_2" {
   domain = "vpc"
-  tags   = { Name = "${var.cluster_name}-NAT2-EIP" }
+  tags = { Name = "${var.cluster_name}-NAT2-EIP"
+    yor_trace = "4a0efaea-2d67-4857-a025-f63e4d121673"
+  }
 }
 
 # Creates a NAT Gateway in the first public subnet for outbound internet access from private subnets.
 resource "aws_nat_gateway" "nat_gateway_1" {
   allocation_id = aws_eip.nat_eip_1.id
   subnet_id     = aws_subnet.public_1.id
-  tags          = { Name = "${var.cluster_name}-NAT1" }
-  depends_on    = [aws_internet_gateway.k8s_igw]
+  tags = { Name = "${var.cluster_name}-NAT1"
+    yor_trace = "297a2dac-0bc5-43ef-bee4-7f1bfebe5ff9"
+  }
+  depends_on = [aws_internet_gateway.k8s_igw]
 }
 
 # Creates a second NAT Gateway in the second public subnet for high availability.
 resource "aws_nat_gateway" "nat_gateway_2" {
   allocation_id = aws_eip.nat_eip_2.id
   subnet_id     = aws_subnet.public_2.id
-  tags          = { Name = "${var.cluster_name}-NAT2" }
-  depends_on    = [aws_internet_gateway.k8s_igw]
+  tags = { Name = "${var.cluster_name}-NAT2"
+    yor_trace = "13a08363-34f4-4f80-8ebd-72dcc6edbf02"
+  }
+  depends_on = [aws_internet_gateway.k8s_igw]
 }
 
 
@@ -119,7 +133,9 @@ resource "aws_nat_gateway" "nat_gateway_2" {
 # Defines a route table for the public subnets.
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.k8s_vpc.id
-  tags   = { Name = "${var.cluster_name}-Public-RT" }
+  tags = { Name = "${var.cluster_name}-Public-RT"
+    yor_trace = "f06d42f7-7317-4711-bb4f-c177395dfd63"
+  }
 }
 
 # Adds a route to the public route table that directs internet-bound traffic to the Internet Gateway.
@@ -145,7 +161,9 @@ resource "aws_route_table_association" "public_2" {
 # Defines a dedicated route table for the first private subnet.
 resource "aws_route_table" "private_1" {
   vpc_id = aws_vpc.k8s_vpc.id
-  tags   = { Name = "${var.cluster_name}-Private-RT-1" }
+  tags = { Name = "${var.cluster_name}-Private-RT-1"
+    yor_trace = "59071b1c-20de-4797-a743-d2633672eb9a"
+  }
 }
 
 # Adds a route that directs internet-bound traffic from the private subnet to the first NAT Gateway.
@@ -165,7 +183,9 @@ resource "aws_route_table_association" "private_1" {
 # Defines a dedicated route table for the second private subnet.
 resource "aws_route_table" "private_2" {
   vpc_id = aws_vpc.k8s_vpc.id
-  tags   = { Name = "${var.cluster_name}-Private-RT-2" }
+  tags = { Name = "${var.cluster_name}-Private-RT-2"
+    yor_trace = "8e6b762a-e854-470f-981f-c2e913634fb7"
+  }
 }
 
 # Adds a route that directs internet-bound traffic from the private subnet to the second NAT Gateway.
